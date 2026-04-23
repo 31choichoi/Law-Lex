@@ -61,6 +61,12 @@ export default function App() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  const handleLogoClick = () => {
+    setCurrentView('home');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    setIsMenuOpen(false);
+  };
+
   const handleConsultationSubmit = (e: any) => {
     e.preventDefault();
     setIsSubmitting(true);
@@ -88,12 +94,12 @@ export default function App() {
     return (
       <div className="min-h-screen bg-slate pt-24 px-6">
         <nav className="fixed top-0 left-0 right-0 z-50 bg-navy px-8 py-4 flex items-center justify-between shadow-2xl">
-           <div className="flex items-center gap-2 cursor-pointer" onClick={() => setCurrentView('home')}>
+           <div className="flex items-center gap-2 cursor-pointer" onClick={handleLogoClick}>
              <Scale className="text-azure w-6 h-6" />
              <span className="font-display font-bold text-xl text-white">LEX ADMIN</span>
            </div>
            <button 
-            onClick={() => setCurrentView('home')}
+            onClick={handleLogoClick}
             className="text-white/70 hover:text-white text-sm font-bold flex items-center gap-2"
            >
              나가기 <Plus size={18} className="rotate-45" />
@@ -181,7 +187,7 @@ export default function App() {
             ? 'bg-white shadow-[0_20px_50px_rgba(0,0,0,0.1)] border border-slate scale-[0.98]' 
             : 'bg-white/10 backdrop-blur-md border border-white/20'
         }`}>
-          <div className="flex items-center gap-2 group cursor-pointer" onClick={() => setCurrentView('home')}>
+          <div className="flex items-center gap-2 group cursor-pointer" onClick={handleLogoClick}>
             <div className={`w-8 h-8 rounded-full flex items-center justify-center transition-colors duration-500 ${
               scrolled ? 'bg-navy' : 'bg-azure'
             }`}>
