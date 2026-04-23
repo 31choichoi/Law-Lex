@@ -321,7 +321,7 @@ export default function App() {
 
       {/* Feature Section (Bento Style) */}
       <section id="features" className="py-32 px-6">
-        <div className="max-w-7xl auto px-0">
+        <div className="max-w-7xl mx-auto px-0">
           <div className="text-center mb-20">
             <h2 className="text-4xl md:text-5xl font-black mb-4">서비스 전문 분야</h2>
             <p className="text-navy/50 max-w-2xl mx-auto">각 분야 최고의 전문 변호사팀이 의뢰인의 상황에 최적화된 맞춤형 법률 솔루션을 제공합니다.</p>
