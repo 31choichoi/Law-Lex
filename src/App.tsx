@@ -252,14 +252,14 @@ export default function App() {
                 </div>
               </motion.div>
               
-              <h2 className="text-white text-3xl mb-4 font-light">당신의 가장 확실한 조력자</h2>
+              <h2 className="text-white text-3xl mb-4 font-light">가장 믿음직한 이혼전문변호사</h2>
               <h3 className="text-white text-7xl md:text-8xl font-black mb-8 leading-[0.9]">
-                법률을 넘어, <br />
-                <span className="text-azure italic">가치를 지킵니다</span>
+                복잡한 이혼, <br />
+                <span className="text-azure italic">명쾌하게 해결합니다</span>
               </h3>
               
               <p className="text-white/50 text-lg mb-10 max-w-lg mx-auto lg:mx-0">
-                복잡한 법률 분쟁, 이제 렉스 법률사무소와 함께 스마트하고 신속하게 해결하세요. 데이터 기반의 분석과 강력한 변론으로 의뢰인의 승리를 이끕니다.
+                재산분할부터 양육권까지, 이혼전문변호사의 정교한 전략으로 의뢰인의 새로운 시작을 지원합니다. 렉스 법률사무소만의 특화된 승소 데이터로 최선의 결과를 약속드립니다.
               </p>
 
               <div className="flex flex-col sm:flex-row items-center gap-4 justify-center lg:justify-start">
@@ -328,6 +328,36 @@ export default function App() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="bg-slate rounded-[32px] p-10 group hover:bg-azure transition-all duration-500 overflow-hidden relative">
+              <div className="relative z-10">
+                <div className="mb-6 text-navy group-hover:text-white">
+                  <Users size={32} />
+                </div>
+                <h3 className="text-3xl font-bold mb-4 group-hover:text-white">이혼전문</h3>
+                <p className="text-navy/40 group-hover:text-white/50 mb-8">의뢰인의 심적 고통에 공감하며, 재산 분할 및 양육권 등 예민한 문제를 이혼전문변호사가 섬세하게 해결합니다.</p>
+                <button className="text-navy font-bold flex items-center gap-1 group-hover:text-white">
+                  솔루션 보기 <ChevronRight size={16} />
+                </button>
+              </div>
+              <div className="absolute -bottom-10 -right-10 opacity-10 group-hover:scale-125 transition-transform duration-500 text-white">
+                <Users size={200} />
+              </div>
+            </div>
+
+            <div className="bg-slate rounded-[32px] p-10 group hover:bg-navy transition-all duration-500 relative">
+              <div className="mb-6 text-azure group-hover:text-white">
+                <Gavel size={32} />
+              </div>
+              <h3 className="text-3xl font-bold mb-4 group-hover:text-white font-display">형사 전문</h3>
+              <p className="text-navy/40 group-hover:text-white/50 mb-8">수사 단계부터 재판까지, 피의자의 방어권을 최대한 보장하며 최선의 결과를 도출합니다.</p>
+              <button className="text-azure font-bold flex items-center gap-1 group-hover:text-white">
+                전문가 상담 <ChevronRight size={16} />
+              </button>
+              <div className="absolute -bottom-10 -right-10 opacity-10 group-hover:scale-125 transition-transform duration-500 text-navy group-hover:text-white">
+                <Gavel size={200} />
+              </div>
+            </div>
+
             <div className="bg-slate rounded-[32px] p-10 group hover:bg-navy transition-all duration-500 overflow-hidden relative">
               <div className="relative z-10">
                 <div className="mb-6 text-azure group-hover:text-white">
@@ -341,36 +371,6 @@ export default function App() {
               </div>
               <div className="absolute -bottom-10 -right-10 opacity-10 group-hover:scale-125 transition-transform duration-500 text-navy group-hover:text-white">
                 <Briefcase size={200} />
-              </div>
-            </div>
-
-            <div className="bg-slate rounded-[32px] p-10 group hover:bg-azure transition-all duration-500 relative">
-              <div className="mb-6 text-navy group-hover:text-white">
-                <Gavel size={32} />
-              </div>
-              <h3 className="text-3xl font-bold mb-4 group-hover:text-white font-display">형사 전문</h3>
-              <p className="text-navy/40 group-hover:text-white/50 mb-8">수사 단계부터 재판까지, 피의자의 방어권을 최대한 보장하며 최선의 결과를 도출합니다.</p>
-              <button className="text-navy font-bold flex items-center gap-1 group-hover:text-white">
-                전문가 상담 <ChevronRight size={16} />
-              </button>
-              <div className="absolute -bottom-10 -right-10 opacity-10 group-hover:scale-125 transition-transform duration-500 text-white">
-                <Gavel size={200} />
-              </div>
-            </div>
-
-            <div className="bg-slate rounded-[32px] p-10 group hover:bg-navy transition-all duration-500 overflow-hidden relative">
-              <div className="relative z-10">
-                <div className="mb-6 text-azure group-hover:text-white">
-                  <Users size={32} />
-                </div>
-                <h3 className="text-3xl font-bold mb-4 group-hover:text-white">이혼/가사</h3>
-                <p className="text-navy/40 group-hover:text-white/50 mb-8">의뢰인의 심적 고통에 공감하며, 재산 분할 및 양육권 등 예민한 문제를 섬세하게 해결합니다.</p>
-                <button className="text-azure font-bold flex items-center gap-1 group-hover:text-white">
-                  솔루션 보기 <ChevronRight size={16} />
-                </button>
-              </div>
-              <div className="absolute -bottom-10 -right-10 opacity-10 group-hover:scale-125 transition-transform duration-500 text-navy group-hover:text-white">
-                <Users size={200} />
               </div>
             </div>
           </div>
