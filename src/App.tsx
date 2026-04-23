@@ -349,9 +349,9 @@ export default function App() {
                 className="relative w-full max-w-[500px] aspect-[4/5] rounded-[60px] overflow-hidden shadow-[0_50px_100px_rgba(0,0,0,0.5)] border border-white/10 group"
               >
                 <img 
-                  src="/src/동탄변호사.png" 
+                  src="http://mydrim.net/img/lawyer.png" 
                   alt="이혼전문변호사" 
-                  className="w-full h-full object-cover object-top transition-transform duration-[2000ms] group-hover:scale-110"
+                  className="w-full h-full object-cover object-center transition-transform duration-[2000ms] group-hover:scale-110"
                   referrerPolicy="no-referrer"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-navy/90 via-navy/20 to-transparent" />
@@ -372,18 +372,20 @@ export default function App() {
                     {[
                       { title: '상간녀 위자료 청구 소송 승소', icon: Zap },
                       { title: '재산분할 기여도 60% 인정', icon: Shield },
+                      { title: '양육권 및 친권 완전 확보 성공', icon: Gavel },
+                      { title: '과거 양육비 일시금 지급 판결', icon: Briefcase },
                     ].map((news, idx) => (
                       <motion.div 
                         key={idx}
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 1 + (idx * 0.2) }}
-                        className="bg-white/5 backdrop-blur-md p-4 rounded-2xl flex items-center gap-4 border border-white/10 hover:bg-white/10 transition-colors"
+                        className="bg-white/5 backdrop-blur-md p-3 rounded-2xl flex items-center gap-4 border border-white/10 hover:bg-white/10 transition-colors"
                       >
-                        <div className="w-8 h-8 bg-azure/20 rounded-full flex items-center justify-center">
+                        <div className="w-8 h-8 bg-azure/20 rounded-full flex items-center justify-center shrink-0">
                           <news.icon size={14} className="text-azure" />
                         </div>
-                        <p className="text-white font-bold text-xs">{news.title}</p>
+                        <p className="text-white font-bold text-[11px] leading-tight">{news.title}</p>
                       </motion.div>
                     ))}
                   </div>
@@ -524,7 +526,7 @@ export default function App() {
             <div className="flex flex-col justify-center">
               <div className="flex items-center gap-5 mb-10 overflow-hidden">
                 <div className="w-20 h-20 rounded-3xl overflow-hidden border-2 border-azure/20 shrink-0">
-                  <img src="/src/동탄변호사.png" alt="대표변호사" className="w-full h-full object-cover object-top" referrerPolicy="no-referrer" />
+                  <img src="http://mydrim.net/img/lawyer.png" alt="대표변호사" className="w-full h-full object-cover object-center" referrerPolicy="no-referrer" />
                 </div>
                 <div>
                    <span className="inline-block bg-navy/5 text-navy text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-widest mb-1">상담 책임 변호사</span>
