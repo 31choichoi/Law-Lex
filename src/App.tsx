@@ -31,11 +31,22 @@ export default function App() {
   // View State (home | admin)
   const [currentView, setCurrentView] = useState<'home' | 'admin'>('home');
   
+  // Form and Status States
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitSuccess, setSubmitSuccess] = useState(false);
+  
   // Consultation Data State
   const [inquiries, setInquiries] = useState<any[]>([
-    { id: 1, name: '김철수', phone: '010-1234-5678', category: '형사 소송', message: '사기 피해 관련 상담 요청합니다.', date: '2026-04-23 11:30', status: '대기' },
-    { id: 2, name: '이영희', phone: '010-9876-5432', category: '기업 법무', message: '스타트업 투자 계약서 검토 부탁드립니다.', date: '2026-04-22 15:45', status: '진행중' },
+    { id: 1, name: '김철수', phone: '010-1234-5678', category: '이혼전문', message: '사기 피해 관련 상담 요청합니다.', date: '2026-04-23 11:30', status: '대기' },
+    { id: 2, name: '이영희', phone: '010-9876-5432', category: '기업/금융', message: '스타트업 투자 계약서 검토 부탁드립니다.', date: '2026-04-22 15:45', status: '진행중' },
   ]);
+
+  useEffect(() => {
+    if (submitSuccess) {
+      const timer = setTimeout(() => setSubmitSuccess(false), 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [submitSuccess]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -52,19 +63,25 @@ export default function App() {
 
   const handleConsultationSubmit = (e: any) => {
     e.preventDefault();
-    const formData = new FormData(e.target);
-    const newInquiry = {
-      id: Date.now(),
-      name: formData.get('name'),
-      phone: formData.get('phone'),
-      category: formData.get('category'),
-      message: formData.get('message'),
-      date: new Date().toLocaleString(),
-      status: '대기'
-    };
-    setInquiries([newInquiry, ...inquiries]);
-    alert('상담 신청이 완료되었습니다! 관리자 모드에서 확인해 보세요.');
-    e.target.reset();
+    setIsSubmitting(true);
+    
+    // Simulate API call
+    setTimeout(() => {
+      const formData = new FormData(e.target);
+      const newInquiry = {
+        id: Date.now(),
+        name: formData.get('name'),
+        phone: formData.get('phone'),
+        category: formData.get('category'),
+        message: formData.get('message'),
+        date: new Date().toLocaleString(),
+        status: '대기'
+      };
+      setInquiries([newInquiry, ...inquiries]);
+      setIsSubmitting(false);
+      setSubmitSuccess(true);
+      e.target.reset();
+    }, 1000);
   };
 
   if (currentView === 'admin') {
@@ -203,7 +220,7 @@ export default function App() {
             >
               관리자
             </button>
-            <button className={`px-6 py-2.5 rounded-full text-sm font-bold flex items-center gap-2 transition-all group shadow-lg ${
+            <button className={`px-6 py-2.5 rounded-full text-sm font-bold hidden sm:flex items-center gap-2 transition-all group shadow-lg ${
               scrolled 
                 ? 'bg-navy text-white hover:bg-azure' 
                 : 'bg-azure text-white hover:bg-blue-600'
@@ -211,8 +228,60 @@ export default function App() {
               의뢰인 로그인
               <ArrowUpRight className="w-4 h-4 group-hover:rotate-45 transition-transform" />
             </button>
+            <button 
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              className={`lg:hidden p-2 rounded-full transition-colors ${
+                scrolled ? 'text-navy hover:bg-navy/5' : 'text-white hover:bg-white/10'
+              }`}
+            >
+              {isMenuOpen ? <Plus className="rotate-45" size={24} /> : <Menu size={24} />}
+            </button>
           </div>
         </div>
+
+        {/* Mobile Menu */}
+        <AnimatePresence>
+          {isMenuOpen && (
+            <motion.div
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              className="lg:hidden absolute top-24 left-1/2 -translate-x-1/2 w-full px-4"
+            >
+              <div className="bg-white rounded-3xl shadow-2xl border border-navy/5 p-6 space-y-4">
+                {[
+                  { name: '변호사 소개', href: '#hero' },
+                  { name: '전문 분야', href: '#features' },
+                  { name: '스마트 포털', href: '#portal' },
+                  { name: '긴급 상담', href: '#contact' }
+                ].map((item) => (
+                  <a 
+                    key={item.name} 
+                    href={item.href}
+                    onClick={() => setIsMenuOpen(false)}
+                    className="block px-4 py-3 rounded-xl text-navy font-bold hover:bg-navy/5 transition-colors"
+                  >
+                    {item.name}
+                  </a>
+                ))}
+                <div className="pt-4 border-t border-navy/5 flex flex-col gap-3">
+                  <button 
+                    onClick={() => {
+                      setCurrentView('admin');
+                      setIsMenuOpen(false);
+                    }}
+                    className="w-full py-3 rounded-xl text-navy font-bold border border-navy/10 hover:bg-navy hover:text-white transition-all text-sm"
+                  >
+                    관리자 모드
+                  </button>
+                  <button className="w-full py-4 rounded-xl bg-azure text-white font-bold text-sm shadow-lg">
+                    의뢰인 로그인
+                  </button>
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </nav>
 
       {/* Back to Top Button */}
@@ -252,14 +321,14 @@ export default function App() {
                 </div>
               </motion.div>
               
-              <h2 className="text-white text-3xl mb-4 font-light">가장 믿음직한 이혼전문변호사</h2>
+              <h2 className="text-white text-3xl mb-4 font-light">가장 믿음직한 동탄이혼변호사</h2>
               <h3 className="text-white text-7xl md:text-8xl font-black mb-8 leading-[0.9]">
-                복잡한 이혼, <br />
+                동탄 이혼, <br />
                 <span className="text-azure italic">명쾌하게 해결합니다</span>
               </h3>
               
               <p className="text-white/50 text-lg mb-10 max-w-lg mx-auto lg:mx-0">
-                재산분할부터 양육권까지, 이혼전문변호사의 정교한 전략으로 의뢰인의 새로운 시작을 지원합니다. 렉스 법률사무소만의 특화된 승소 데이터로 최선의 결과를 약속드립니다.
+                재산분할부터 양육권까지, 동탄 지역 최적화된 전략으로 의뢰인의 새로운 시작을 지원합니다. 렉스 법률사무소만의 특화된 승소 데이터로 최선의 결과를 약속드립니다.
               </p>
 
               <div className="flex flex-col sm:flex-row items-center gap-4 justify-center lg:justify-start">
@@ -267,53 +336,62 @@ export default function App() {
                   무료 진단 신청 <Plus size={20} />
                 </button>
                 <button className="text-white/70 hover:text-white transition-colors text-sm font-semibold underline underline-offset-8">
-                  전문 변호사 프로필 보기
+                  동탄 전문 변호사 프로필 보기
                 </button>
               </div>
             </div>
 
-            <div className="relative">
+            <div className="relative h-full flex items-center justify-center lg:justify-end">
               <motion.div 
-                animate={{ y: [0, -20, 0] }}
-                transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-                className="relative z-10"
+                initial={{ opacity: 0, x: 50 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.8, ease: "easeOut" }}
+                className="relative w-full max-w-[500px] aspect-[4/5] rounded-[60px] overflow-hidden shadow-[0_50px_100px_rgba(0,0,0,0.5)] border border-white/10 group"
               >
-                <div className="bg-white/10 backdrop-blur-3xl rounded-[40px] p-8 border border-white/10 aspect-square flex flex-col justify-between">
-                  <div className="flex justify-between items-start">
-                    <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center">
-                      <Scale className="text-navy" size={24} />
-                    </div>
-                    <div className="text-right">
-                      <p className="text-white/40 text-xs uppercase tracking-widest font-bold">누적 해결 사건</p>
-                      <h4 className="text-white text-4xl font-bold">12,000+</h4>
-                    </div>
+                <img 
+                  src="/src/동탄변호사.png" 
+                  alt="이혼전문변호사" 
+                  className="w-full h-full object-cover object-top transition-transform duration-[2000ms] group-hover:scale-110"
+                  referrerPolicy="no-referrer"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-navy/90 via-navy/20 to-transparent" />
+                
+                {/* Floating Stats Badge */}
+                <div className="absolute top-8 right-8 bg-azure px-6 py-3 rounded-2xl shadow-xl border border-white/20 backdrop-blur-md">
+                   <p className="text-[10px] font-bold text-white/70 uppercase tracking-widest mb-1">상담 만족도</p>
+                   <p className="text-xl font-black text-white italic">99.8%</p>
+                </div>
+
+                {/* Recently Won Card inside image */}
+                <div className="absolute bottom-8 left-8 right-8 space-y-4">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="w-2 h-2 bg-azure rounded-full animate-pulse" />
+                    <p className="text-white/60 font-bold text-[10px] uppercase tracking-[0.2em]">최근 승소 리포트</p>
                   </div>
-                  
-                  <div className="space-y-4">
-                    <div className="flex flex-col gap-3">
-                      <p className="text-white/60 font-bold text-xs uppercase tracking-widest px-2">최근 승소 소식</p>
-                      {[
-                        { title: '대형 기업 횡령 무죄 판결', time: '24시간 전', icon: Zap },
-                        { title: '부동산 가처분 이의 신청 인용', time: '2일 전', icon: Shield },
-                        { title: '가상자산 사기 피해 전액 회수', time: '3일 전', icon: Globe }
-                      ].map((news, idx) => (
-                        <div key={idx} className="bg-white/5 p-4 rounded-2xl flex items-center gap-4 border border-white/10 hover:bg-white/10 transition-colors group cursor-default">
-                          <div className="w-10 h-10 bg-azure/20 rounded-full flex items-center justify-center group-hover:bg-azure transition-colors">
-                            <news.icon size={18} className="text-azure group-hover:text-white" />
-                          </div>
-                          <div>
-                            <p className="text-white font-bold text-sm leading-tight">{news.title}</p>
-                            <p className="text-white/30 text-[10px] mt-1">{news.time} 완료</p>
-                          </div>
+                  <div className="space-y-3">
+                    {[
+                      { title: '상간녀 위자료 청구 소송 승소', icon: Zap },
+                      { title: '재산분할 기여도 60% 인정', icon: Shield },
+                    ].map((news, idx) => (
+                      <motion.div 
+                        key={idx}
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 1 + (idx * 0.2) }}
+                        className="bg-white/5 backdrop-blur-md p-4 rounded-2xl flex items-center gap-4 border border-white/10 hover:bg-white/10 transition-colors"
+                      >
+                        <div className="w-8 h-8 bg-azure/20 rounded-full flex items-center justify-center">
+                          <news.icon size={14} className="text-azure" />
                         </div>
-                      ))}
-                    </div>
+                        <p className="text-white font-bold text-xs">{news.title}</p>
+                      </motion.div>
+                    ))}
                   </div>
                 </div>
               </motion.div>
               
-              {/* Decorative elements */}
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[140%] h-[140%] bg-azure/20 blur-[120px] -z-10 rounded-full" />
+              {/* Decorative behind image */}
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-azure/10 blur-[150px] -z-10 rounded-full" />
             </div>
           </div>
         </div>
@@ -444,9 +522,20 @@ export default function App() {
           <div className="grid lg:grid-cols-2 gap-20 items-stretch">
             {/* Contact Info */}
             <div className="flex flex-col justify-center">
+              <div className="flex items-center gap-5 mb-10 overflow-hidden">
+                <div className="w-20 h-20 rounded-3xl overflow-hidden border-2 border-azure/20 shrink-0">
+                  <img src="/src/동탄변호사.png" alt="대표변호사" className="w-full h-full object-cover object-top" referrerPolicy="no-referrer" />
+                </div>
+                <div>
+                   <span className="inline-block bg-navy/5 text-navy text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-widest mb-1">상담 책임 변호사</span>
+                   <p className="text-xl font-bold text-navy">의뢰인 전담 직접 상담</p>
+                   <p className="text-navy/40 text-sm font-medium">검토 후 담당자가 아닌 변호사가 직접 연락드립니다.</p>
+                </div>
+              </div>
+              
               <h2 className="text-4xl md:text-6xl font-black mb-8 leading-tight">
                 당신의 권리를 위한 <br />
-                <span className="text-azure text-3xl md:text-5xl">가장 빠른 첫걸음</span>
+                <span className="text-azure text-3xl md:text-5xl border-b-4 border-azure/20 pb-2 inline-block">가장 빠른 첫걸음</span>
               </h2>
               <p className="text-navy/50 text-lg mb-12 max-w-md">
                 상담은 비공개로 진행되며, 전문 변호사가 직접 검토 후 24시간 이내에 연락드립니다. 망설이지 말고 지금 바로 진단을 신청하세요.
@@ -500,9 +589,9 @@ export default function App() {
                   <label className="text-xs font-bold text-navy/40 uppercase tracking-widest ml-1">상담희망 분야</label>
                   <select name="category" required className="w-full bg-white px-6 py-4 rounded-2xl border border-navy/5 outline-none focus:border-azure transition-colors font-medium appearance-none">
                     <option value="">분야를 선택해 주세요</option>
-                    <option value="기업 법무 / 금융">기업 법무 / 금융</option>
-                    <option value="형사 소송 / 방어">형사 소송 / 방어</option>
-                    <option value="이혼 / 가사 분쟁">이혼 / 가사 분쟁</option>
+                    <option value="동탄이혼전문">동탄이혼전문 (재산분할/양육권)</option>
+                    <option value="형사 전문">형사 전문 (수사/재판)</option>
+                    <option value="기업/금융">기업/금융 (자문/분쟁)</option>
                     <option value="부동산 / 민사">부동산 / 민사</option>
                     <option value="기타 법률 자문">기타 법률 자문</option>
                   </select>
@@ -511,9 +600,28 @@ export default function App() {
                   <label className="text-xs font-bold text-navy/40 uppercase tracking-widest ml-1">상담 내용 요약</label>
                   <textarea name="message" required rows={4} className="w-full bg-white px-6 py-4 rounded-2xl border border-navy/5 outline-none focus:border-azure transition-colors font-medium resize-none" placeholder="문의하실 내용을 간단히 작성해 주세요."></textarea>
                 </div>
-                <button type="submit" className="w-full bg-navy text-white hover:bg-azure py-5 rounded-2xl font-bold flex items-center justify-center gap-2 transition-all group shadow-xl">
-                  법률 컨설팅 신청하기
-                  <ArrowUpRight className="w-5 h-5 group-hover:rotate-45 transition-transform" />
+                
+                <AnimatePresence>
+                  {submitSuccess && (
+                    <motion.div 
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="bg-green-50 border border-green-100 p-4 rounded-2xl text-green-700 text-sm font-bold text-center"
+                    >
+                      상담 신청이 완료되었습니다. 관리자 모드에서 실시간 확인이 가능합니다.
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+
+                <button 
+                  type="submit" 
+                  disabled={isSubmitting}
+                  className={`w-full text-white py-5 rounded-2xl font-bold flex items-center justify-center gap-2 transition-all group shadow-xl ${
+                    isSubmitting ? 'bg-navy/50 cursor-not-allowed' : 'bg-navy hover:bg-azure'
+                  }`}
+                >
+                  {isSubmitting ? '전송 중...' : '법률 컨설팅 신청하기'}
+                  {!isSubmitting && <ArrowUpRight className="w-5 h-5 group-hover:rotate-45 transition-transform" />}
                 </button>
               </form>
             </div>
